@@ -52,6 +52,27 @@ include::https://raw.github.com/spring-guides/getting-started-macros/master/spri
 
 
 [[initial]]
+== Install and launch MongoDB
+
+For this guide to work, you must stand up a local MongoDB server.
+
+On a Mac OS X machine with homebrew, just do this:
+
+```
+brew install mongodb
+```
+
+More installation options are found at http://docs.mongodb.org/manual/installation/.
+
+After installing it, you need to launch the mongo daemon.
+
+```
+$ mongod
+all output going to: /usr/local/var/log/mongodb/mongo.log
+```
+
+The MongoDB client that is also installed can be started from another terminal window by typing `mongo`.
+
 == Create a domain object
 
 Create a new domain object to present a person.
@@ -74,9 +95,11 @@ Next you need to create a simple repository.
 include::complete/src/main/java/hello/PersonRepository.java[]
 ----
 
-This repository is an interface and will allow you to perform various operations involving `Person` objects. It gets these operations by extending the http://docs.spring.io/spring-data/commons/docs/{spring_data_commons}/api/org/springframework/data/repository/PagingAndSortingRepository.html[PagingAndSortingRepositry] interface defined in Spring Data Commons.
+This repository is an interface and will allow you to perform various operations involving `Person` objects. It gets these operations by extending MongoRepository, which in turn extends the http://docs.spring.io/spring-data/commons/docs/{spring_data_commons}/api/org/springframework/data/repository/PagingAndSortingRepository.html[PagingAndSortingRepositry] interface defined in Spring Data Commons.
 
 At runtime, Spring Data REST will create an implementation of this interface automatically. Then it will use the http://docs.spring.io/spring-data/rest/docs/{spring_data_rest}/api/org/springframework/data/rest/core/annotation/RepositoryRestResource.html[@RepositoryRestResource] annotation to direct Spring MVC to create RESTful endpoints at `/people`.
+
+Here you have also defined a custom query to retrieve a list of `Person` objects based on the lastName. You'll see how to invoke it further down in this guide.
 
 == Make the application executable
 
@@ -136,6 +159,9 @@ $ curl http://localhost:8080/people
     "self" : {
       "href" : "http://localhost:8080/people{?page,size,sort}",
       "templated" : true
+    },
+    "search" : {
+      "href" : "http://localhost:8080/people/search"
     }
   },
   "page" : {
@@ -149,13 +175,15 @@ $ curl http://localhost:8080/people
 
 There are currently no elements and hence no pages. Time to create a new `Person`!
 
+NOTE: If you run this guide multiple times, there may be left over data. Refer to the http://docs.mongodb.org/manual/reference/mongo-shell/[MongoDB shell quick reference] to find commands to find and drop your database if you need a fresh start.
+
 ```
 $ curl -i -X POST -H "Content-Type:application/json" -d '{  "firstName" : "Frodo",  "lastName" : "Baggins" }' http://localhost:8080/people
 HTTP/1.1 201 Created
 Server: Apache-Coyote/1.1
-Location: http://localhost:8080/people/1
+Location: http://localhost:8080/people/53149b8e3004990b1af9f229
 Content-Length: 0
-Date: Wed, 26 Feb 2014 20:26:55 GMT
+Date: Mon, 03 Mar 2014 15:08:46 GMT
 ```
 
 - `-i` ensures you can see the response message including the headers. The URI of the newly created `Person` is shown
@@ -163,7 +191,7 @@ Date: Wed, 26 Feb 2014 20:26:55 GMT
 - `-H "Content-Type:application/json"` sets the content type so the application knows the payload contains a JSON object
 - `-d '{  "firstName" : "Frodo",  "lastName" : "Baggins" }'` is the data being sent
 
-From this you can query against for all people:
+From this you can query for all people:
 
 ```
 $ curl http://localhost:8080/people
@@ -172,6 +200,9 @@ $ curl http://localhost:8080/people
     "self" : {
       "href" : "http://localhost:8080/people{?page,size,sort}",
       "templated" : true
+    },
+    "search" : {
+      "href" : "http://localhost:8080/people/search"
     }
   },
   "_embedded" : {
@@ -180,7 +211,7 @@ $ curl http://localhost:8080/people
       "lastName" : "Baggins",
       "_links" : {
         "self" : {
-          "href" : "http://localhost:8080/people/1"
+          "href" : "http://localhost:8080/people/53149b8e3004990b1af9f229"
         }
       }
     } ]
@@ -199,13 +230,13 @@ The **persons** object contains a list with Frodo. Notice how it includes a **se
 You can query directly for the individual record:
 
 ```
-$ curl http://localhost:8080/people/1
+$ curl http://localhost:8080/people/53149b8e3004990b1af9f229
 {
   "firstName" : "Frodo",
   "lastName" : "Baggins",
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/people/1"
+      "href" : "http://localhost:8080/people/53149b8e3004990b1af9f229"
     }
   }
 }
@@ -215,31 +246,68 @@ NOTE: This might appear to be purely web based, but behind the scenes, it is tal
 
 In this guide, there is only one domain object. With a more complex system where domain objects are related to each other, Spring Data REST will render additional links to help navigate to connected records.
 
+Find all the custom queries:
+
+```
+$ curl http://localhost:8080/people/search
+{
+  "_links" : {
+    "findByLastName" : {
+      "href" : "http://localhost:8080/people/search/findByLastName{?name}",
+      "templated" : true
+    }
+  }
+}
+```
+
+You can see the URL for the query including the HTTP query parameter `name`. If you'll notice, this matches the `@Param("name")` annotation embedded in the interface.
+
+To use the `findByLastName` query, do this:
+
+```
+$ curl http://localhost:8080/people/search/findByLastName?name=Baggins
+{
+  "_embedded" : {
+    "persons" : [ {
+      "firstName" : "Frodo",
+      "lastName" : "Baggins",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/people/53149b8e3004990b1af9f229"
+        }
+      }
+    } ]
+  }
+}
+```
+
+Because you defined it to return `List<Person` in the code, it will return all of the results. If you had defined it only return `Person`, it will pick one of the Person objects to return. Since this can be unpredictable, you probably don't want to do that for queries that can return multiple entries.
+
 You can also issue PUT, PATCH, and DELETE REST calls to either replace, update, or delete existing records.
 
 ```
-$ curl -X PUT -H "Content-Type:application/json" -d '{ "firstName": "Bilbo", "lastName": "Baggins" }' http://localhost:8080/people/1
-$ curl http://localhost:8080/people/1
+$ curl -X PUT -H "Content-Type:application/json" -d '{ "firstName": "Bilbo", "lastName": "Baggins" }' http://localhost:8080/people/53149b8e3004990b1af9f229
+$ curl http://localhost:8080/people/53149b8e3004990b1af9f229
 {
   "firstName" : "Bilbo",
   "lastName" : "Baggins",
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/people/1"
+      "href" : "http://localhost:8080/people/53149b8e3004990b1af9f229"
     }
   }
 }
 ```
 
 ```
-$ curl -X PATCH -H "Content-Type:application/json" -d '{ "firstName": "Bilbo Jr." }' http://localhost:8080/people/1
-$ curl http://localhost:8080/people/1
+$ curl -X PATCH -H "Content-Type:application/json" -d '{ "firstName": "Bilbo Jr." }' http://localhost:8080/people/53149b8e3004990b1af9f229
+$ curl http://localhost:8080/people/53149b8e3004990b1af9f229
 {
   "firstName" : "Bilbo Jr.",
   "lastName" : "Baggins",
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/people/1"
+      "href" : "http://localhost:8080/people/53149b8e3004990b1af9f229"
     }
   }
 }
@@ -250,13 +318,16 @@ NOTE: PUT replaces an entire record. Fields not supplied will be replaced with n
 You can delete records:
 
 ```
-$ curl -X DELETE http://localhost:8080/people/1
+$ curl -X DELETE http://localhost:8080/people/53149b8e3004990b1af9f229
 $ curl http://localhost:8080/people
 {
   "_links" : {
     "self" : {
       "href" : "http://localhost:8080/people{?page,size,sort}",
       "templated" : true
+    },
+    "search" : {
+      "href" : "http://localhost:8080/people/search"
     }
   },
   "page" : {
@@ -267,6 +338,8 @@ $ curl http://localhost:8080/people
   }
 }
 ```
+
+A very convenient aspect of this hypermedia-driven interface is how you can discover all the RESTful endpoints using curl (or whatever REST client you are using). There is no need to exchange a formal contract or interface document with your customers.
 
 == Summary
 

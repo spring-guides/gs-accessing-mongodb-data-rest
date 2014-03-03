@@ -339,7 +339,7 @@ $ curl http://localhost:8080/people
 }
 ```
 
-A very convenient aspect of this hypermedia-driven interface is how you can discover all the RESTful endpoints using curl (or whatever REST client you are using). There is no need to exchange a formal contract or interface document with your customers.
+A very convenient aspect of this link:/understanding/HATEOAS[hypermedia-driven interface] is how you can discover all the RESTful endpoints using curl (or whatever REST client you are using). There is no need to exchange a formal contract or interface document with your customers.
 
 == Summary
 

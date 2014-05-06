@@ -17,7 +17,7 @@ projects: [spring-data-rest]
 :source-highlighter: prettify
 :project_id: gs-accessing-mongodb-data-rest
 
-This guide walks you through the process of creating an application that accesses graph-based data through a link:/guides/gs/rest-hateoas[hypermedia-based] link:/understanding/REST[RESTful front end].
+This guide walks you through the process of creating an application that accesses document-based data through a link:/guides/gs/rest-hateoas[hypermedia-based] link:/understanding/REST[RESTful front end].
 
 == What you'll build
 

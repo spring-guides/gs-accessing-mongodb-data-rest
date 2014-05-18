@@ -114,7 +114,7 @@ include::complete/src/main/java/hello/Application.java[]
 
 The `main()` method defers to the {SpringApplication}[`SpringApplication`] helper class, providing `Application.class` as an argument to its `run()` method. This tells Spring to read the annotation metadata from `Application` and to manage it as a component in the link:/understanding/application-context[Spring application context].
 
-The `@EnableMongoRepositories` annotation activates Spring Data MongoDB. Spring Data MongoDB will create a concrete implementation of the `PersonRepository` and configure it to talk to a MongoDB database using the Cypher query language.
+The `@EnableMongoRepositories` annotation activates Spring Data MongoDB. Spring Data MongoDB will create a concrete implementation of the `PersonRepository` and configure it to talk to a MongoDB database.
 
 Spring Data REST is a Spring MVC application. The `@Import(RepositoryRestMvcConfiguration.class)` annotation imports a collection of Spring MVC controllers, JSON converters, and other beans needed to provide a RESTful front end. These components link up to the Spring Data MongoDB backend.
 

@@ -16,15 +16,11 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-data-rest</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-mongodb</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-rest-webmvc</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
     </dependencies>
 
@@ -43,16 +39,4 @@
         </plugins>
     </build>
 
-    <repositories>
-        <repository>
-            <id>spring-releases</id>
-            <url>https://repo.spring.io/libs-release</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>spring-releases</id>
-            <url>https://repo.spring.io/libs-release</url>
-        </pluginRepository>
-    </pluginRepositories>
 </project>

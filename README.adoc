@@ -93,6 +93,8 @@ NOTE: `@RepositoryRestResource` is not required for a repository to be exported.
 
 Here you have also defined a custom query to retrieve a list of `Person` objects based on the lastName. You'll see how to invoke it further down in this guide.
 
+NOTE: Spring Boot by default attempts to connect to a locally hosted instance of MongoDB. Read the http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-mongodb[reference docs] for details on pointing your app to an instance of MongoDB hosted elsewhere.
+
 == Make the application executable
 
 Although it is possible to package this service as a traditional link:/understanding/WAR[WAR] file for deployment to an external application server, the simpler approach demonstrated below creates a standalone application. You package everything in a single, executable JAR file, driven by a good old Java `main()` method. Along the way, you use Spring's support for embedding the link:/understanding/Tomcat[Tomcat] servlet container as the HTTP runtime, instead of deploying to an external instance.

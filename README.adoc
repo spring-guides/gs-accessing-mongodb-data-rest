@@ -85,7 +85,7 @@ Next you need to create a simple repository.
 include::complete/src/main/java/hello/PersonRepository.java[]
 ----
 
-This repository is an interface and will allow you to perform various operations involving `Person` objects. It gets these operations by extending MongoRepository, which in turn extends the http://docs.spring.io/spring-data/commons/docs/{spring_data_commons}/api/org/springframework/data/repository/PagingAndSortingRepository.html[PagingAndSortingRepositry] interface defined in Spring Data Commons.
+This repository is an interface and will allow you to perform various operations involving `Person` objects. It gets these operations by extending `MongoRepository`, which in turn extends the http://docs.spring.io/spring-data/commons/docs/{spring_data_commons}/api/org/springframework/data/repository/PagingAndSortingRepository.html[PagingAndSortingRepositry] interface defined in Spring Data Commons.
 
 At runtime, Spring Data REST will create an implementation of this interface automatically. Then it will use the http://docs.spring.io/spring-data/rest/docs/{spring_data_rest}/api/org/springframework/data/rest/core/annotation/RepositoryRestResource.html[@RepositoryRestResource] annotation to direct Spring MVC to create RESTful endpoints at `/people`.
 
@@ -173,7 +173,7 @@ Date: Mon, 03 Mar 2014 15:08:46 GMT
 ```
 
 - `-i` ensures you can see the response message including the headers. The URI of the newly created `Person` is shown
-- `-X POST` signals this a POST used to create a new entry
+- `-X POST` signals this a `POST` used to create a new entry
 - `-H "Content-Type:application/json"` sets the content type so the application knows the payload contains a JSON object
 - `-d '{  "firstName" : "Frodo",  "lastName" : "Baggins" }'` is the data being sent
 
@@ -269,9 +269,9 @@ $ curl http://localhost:8080/people/search/findByLastName?name=Baggins
 }
 ```
 
-Because you defined it to return `List<Person` in the code, it will return all of the results. If you had defined it only return `Person`, it will pick one of the Person objects to return. Since this can be unpredictable, you probably don't want to do that for queries that can return multiple entries.
+Because you defined it to return `List<Person>` in the code, it will return all of the results. If you had defined it only return `Person`, it will pick one of the Person objects to return. Since this can be unpredictable, you probably don't want to do that for queries that can return multiple entries.
 
-You can also issue PUT, PATCH, and DELETE REST calls to either replace, update, or delete existing records.
+You can also issue `PUT`, `PATCH`, and `DELETE` REST calls to either replace, update, or delete existing records.
 
 ```
 $ curl -X PUT -H "Content-Type:application/json" -d '{ "firstName": "Bilbo", "lastName": "Baggins" }' http://localhost:8080/people/53149b8e3004990b1af9f229
@@ -301,7 +301,7 @@ $ curl http://localhost:8080/people/53149b8e3004990b1af9f229
 }
 ```
 
-NOTE: PUT replaces an entire record. Fields not supplied will be replaced with null. PATCH can be used to update a subset of items.
+NOTE: `PUT` replaces an entire record. Fields not supplied will be replaced with `null`. `PATCH` can be used to update a subset of items.
 
 You can delete records:
 

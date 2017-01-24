@@ -164,7 +164,7 @@ There are currently no elements and hence no pages. Time to create a new `Person
 NOTE: If you run this guide multiple times, there may be left over data. Refer to the http://docs.mongodb.org/manual/reference/mongo-shell/[MongoDB shell quick reference] to find commands to find and drop your database if you need a fresh start.
 
 ```
-$ curl -i -X POST -H "Content-Type:application/json" -d '{  "firstName" : "Frodo",  "lastName" : "Baggins" }' http://localhost:8080/people
+$ curl -i -X POST -H "Content-Type:application/json" -d "{  \"firstName\" : \"Frodo\",  \"lastName\" : \"Baggins\" }" http://localhost:8080/people
 HTTP/1.1 201 Created
 Server: Apache-Coyote/1.1
 Location: http://localhost:8080/people/53149b8e3004990b1af9f229
@@ -274,7 +274,7 @@ Because you defined it to return `List<Person>` in the code, it will return all 
 You can also issue `PUT`, `PATCH`, and `DELETE` REST calls to either replace, update, or delete existing records.
 
 ```
-$ curl -X PUT -H "Content-Type:application/json" -d '{ "firstName": "Bilbo", "lastName": "Baggins" }' http://localhost:8080/people/53149b8e3004990b1af9f229
+$ curl -X PUT -H "Content-Type:application/json" -d "{ \"firstName\": \"Bilbo\", \"lastName\": \"Baggins\" }" http://localhost:8080/people/53149b8e3004990b1af9f229
 $ curl http://localhost:8080/people/53149b8e3004990b1af9f229
 {
   "firstName" : "Bilbo",
@@ -288,7 +288,7 @@ $ curl http://localhost:8080/people/53149b8e3004990b1af9f229
 ```
 
 ```
-$ curl -X PATCH -H "Content-Type:application/json" -d '{ "firstName": "Bilbo Jr." }' http://localhost:8080/people/53149b8e3004990b1af9f229
+$ curl -X PATCH -H "Content-Type:application/json" -d "{ \"firstName\": \"Bilbo Jr.\" }" http://localhost:8080/people/53149b8e3004990b1af9f229
 $ curl http://localhost:8080/people/53149b8e3004990b1af9f229
 {
   "firstName" : "Bilbo Jr.",

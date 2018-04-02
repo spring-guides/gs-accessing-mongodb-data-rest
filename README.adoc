@@ -1,7 +1,3 @@
----
-tags: [spring-data, mongodb, rest, hateoas]
-projects: [spring-data-rest]
----
 :spring_version: current
 :spring_data_rest: current
 :spring_data_commons: current

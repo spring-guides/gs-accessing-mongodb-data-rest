@@ -1,5 +1,5 @@
 
-package hello;
+package com.example.accessingmongodbdatarest;
 
 import java.util.List;
 

@@ -104,12 +104,12 @@ include::complete/build.gradle[]
 == Create a Domain Object
 
 Create a new domain object to present a person, as the following example (in
-`src/main/java/hello/Person.java`) shows:
+`src/main/java/com/example/accessingmongodbdatarest/Person.java`) shows:
 
 ====
 [source,java]
 ----
-include::complete/src/main/java/hello/Person.java[]
+include::complete/src/main/java/com/example/accessingmongodbdatarest/Person.java[]
 ----
 ====
 
@@ -119,12 +119,12 @@ The `Person` object has a first name and a last name. (There is also an ID objec
 == Create a Person Repository
 
 Next, you need to create a simple repository, as the following listing (in
-  `src/main/java/hello/PersonRepository.java`) shows:
+  `src/main/java/com/example/accessingmongodbdatarest/PersonRepository.java`) shows:
 
 ====
 [source,java]
 ----
-include::complete/src/main/java/hello/PersonRepository.java[]
+include::complete/src/main/java/com/example/accessingmongodbdatarest/PersonRepository.java[]
 ----
 ====
 

@@ -38,36 +38,7 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/how_to_complete_this_guide.adoc[]
 
-[[initial]]
-== Install and launch MongoDB
-
-For this guide to work, you must stand up a local MongoDB server.
-
-On a Mac OS X machine with Homebrew installed, run the following command:
-
-====
-[src,bash]
-----
-brew install mongodb
-----
-====
-
-You can find more installation options at https://docs.mongodb.org/manual/installation/.
-
-After installing MongoDB, you need to launch the `mongo` daemon. On a Mac, you can use
-the following command:
-
-====
-[src,bash]
-----
-$ mongod
-all output going to: /usr/local/var/log/mongodb/mongo.log
-----
-====
-
-You can start the MongoDB client from another terminal window by running the `mongo`
-command.
-
+[[scratch]]
 == Starting with Spring Initializr
 
 For all Spring applications, you should start with the https://start.spring.io[Spring
@@ -100,6 +71,36 @@ The following listing shows the `build.gradle` file created when you choose Grad
 include::complete/build.gradle[]
 ----
 ====
+
+[[initial]]
+== Install and launch MongoDB
+
+For this guide to work, you must stand up a local MongoDB server.
+
+On a Mac OS X machine with Homebrew installed, run the following command:
+
+====
+[src,bash]
+----
+brew install mongodb
+----
+====
+
+You can find more installation options at https://docs.mongodb.org/manual/installation/.
+
+After installing MongoDB, you need to launch the `mongo` daemon. On a Mac, you can use
+the following command:
+
+====
+[src,bash]
+----
+$ mongod
+all output going to: /usr/local/var/log/mongodb/mongo.log
+----
+====
+
+You can start the MongoDB client from another terminal window by running the `mongo`
+command.
 
 == Create a Domain Object
 

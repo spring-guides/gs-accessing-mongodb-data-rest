@@ -108,7 +108,7 @@ Create a new domain object to present a person, as the following example (in
 `src/main/java/com/example/accessingmongodbdatarest/Person.java`) shows:
 
 ====
-[source,java]
+[source,java,tabsize=2]
 ----
 include::complete/src/main/java/com/example/accessingmongodbdatarest/Person.java[]
 ----
@@ -123,7 +123,7 @@ Next, you need to create a simple repository, as the following listing (in
   `src/main/java/com/example/accessingmongodbdatarest/PersonRepository.java`) shows:
 
 ====
-[source,java]
+[source,java,tabsize=2]
 ----
 include::complete/src/main/java/com/example/accessingmongodbdatarest/PersonRepository.java[]
 ----

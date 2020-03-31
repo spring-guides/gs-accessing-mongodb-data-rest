@@ -150,7 +150,7 @@ the `lastName` value. You can see how to invoke it further down in this guide.
 NOTE: By default, Spring Boot tries to connect to a locally hosted instance of MongoDB.
 Read the
 https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-mongodb[reference docs]
-for how to point your application to an instance of MongoDB taht is hosted elsewhere.
+for how to point your application to an instance of MongoDB that is hosted elsewhere.
 
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/spring-boot-application-new-path.adoc[]
 

@@ -226,7 +226,7 @@ NOTE: If you run this guide multiple times, there may be leftover data. Refer to
 https://docs.mongodb.org/manual/reference/mongo-shell/[MongoDB shell quick reference] for
 commands to find and drop your database if you need a fresh start.
 
-The following command creats a person named "`Frodo Baggins`":
+The following command creates a person named "`Frodo Baggins`":
 
 ====
 [source,bash]

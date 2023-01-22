@@ -65,7 +65,8 @@ On a Mac OS X machine with Homebrew installed, run the following command:
 ====
 [src,bash]
 ----
-brew install mongodb
+brew tap mongodb/brew
+brew install mongodb-community@6.0
 ----
 ====
 

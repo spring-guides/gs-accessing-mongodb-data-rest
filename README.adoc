@@ -52,29 +52,30 @@ NOTE: You can also fork the project from Github and open it in your IDE or other
 
 For this guide to work, you must stand up a local MongoDB server.
 
-On a Mac OS X machine with Homebrew installed, run the following command:
+On a Mac OS X machine with Homebrew installed, run the following commands:
 
 ====
 [src,bash]
 ----
-brew install mongodb
+brew tap mongodb/brew
+brew install mongodb-community
 ----
 ====
 
 You can find more installation options at https://docs.mongodb.org/manual/installation/.
 
-After installing MongoDB, you need to launch the `mongo` daemon. On a Mac, you can use
+After installing MongoDB, you need to launch the service. On a Mac, you can use
 the following command:
 
 ====
 [src,bash]
 ----
-$ mongod
-all output going to: /usr/local/var/log/mongodb/mongo.log
+$ brew services start mongodb-community
+==> Successfully started `mongodb-community` (label: homebrew.mxcl.mongodb-community)
 ----
 ====
 
-You can start the MongoDB client from another terminal window by running the `mongo`
+You can start the MongoDB client from another terminal window by running the `mongosh`
 command.
 
 == Create a Domain Object
@@ -194,7 +195,7 @@ $ curl http://localhost:8080/people
 There are currently no elements and, hence, no pages. It is time to create a new `Person`!
 
 NOTE: If you run this guide multiple times, there may be leftover data. Refer to the
-https://docs.mongodb.org/manual/reference/mongo-shell/[MongoDB shell quick reference] for
+https://www.mongodb.com/docs/mongodb-shell/[MongoDB Shell quick reference] for
 commands to find and drop your database if you need a fresh start.
 
 The following command creates a person named "`Frodo Baggins`":
@@ -316,7 +317,7 @@ To use the `findByLastName` query, run the following  command:
 ====
 [source,bash]
 ----
-$ curl http://localhost:8080/people/search/findByLastName?name=Baggins
+$ curl "http://localhost:8080/people/search/findByLastName?name=Baggins"
 {
   "_embedded" : {
     "persons" : [ {
@@ -437,4 +438,4 @@ The following guides may also be helpful:
 * https://spring.io/guides/gs/rest-service-cors/[Enabling Cross Origin Requests for a RESTful Web Service]
 * https://spring.io/guides/gs/rest-hateoas/[Building a Hypermedia-Driven RESTful Web Service]
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/footer.adoc[]
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/refs/heads/main/footer.adoc[]

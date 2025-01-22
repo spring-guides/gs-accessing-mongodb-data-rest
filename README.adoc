@@ -317,7 +317,7 @@ To use the `findByLastName` query, run the following  command:
 ====
 [source,bash]
 ----
-$ curl http://localhost:8080/people/search/findByLastName?name=Baggins
+$ curl "http://localhost:8080/people/search/findByLastName?name=Baggins"
 {
   "_embedded" : {
     "persons" : [ {

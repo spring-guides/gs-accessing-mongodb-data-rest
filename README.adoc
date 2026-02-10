@@ -18,8 +18,8 @@ https://projects.spring.io/spring-hateoas[Spring HATEOAS] and
 https://projects.spring.io/spring-data-mongodb[Spring Data MongoDB] and automatically
 combines them together.
 
-NOTE: Spring Data REST also supports link:/guides/gs/accessing-data-rest[Spring Data JPA],
-link:/guides/gs/accessing-gemfire-data-rest[Spring Data Gemfire], and
+NOTE: Spring Data REST also supports link:/guides/gs/accessing-data-rest[Spring Data JPA]
+and
 link:/guides/gs/accessing-neo4j-data-rest[Spring Data Neo4j] as backend data stores, but
 those are not part of this guide.
 
@@ -32,7 +32,7 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 [[scratch]]
 == Starting with Spring Initializr
 
-You can use this https://start.spring.io/#!type=maven-project&groupId=com.example&artifactId=accessing-mongodb-data-rest&name=accessing-mongodb-data-rest&description=Demo%20project%20for%20Spring%20Boot&packageName=com.example.accessing-data-rest&dependencies=data-rest,data-mongodb[pre-initialized project] and click Generate to download a ZIP file. This project is configured to fit the examples in this tutorial.
+You can use this https://start.spring.io/#!type=maven-project&groupId=com.example&artifactId=accessing-mongodb-data-rest&name=accessing-mongodb-data-rest&description=Demo%20project%20for%20Spring%20Boot&packageName=com.example.accessingdatarest&dependencies=data-rest,data-mongodb[pre-initialized project] and click Generate to download a ZIP file. This project is configured to fit the examples in this tutorial.
 
 To manually initialize the project:
 
@@ -45,7 +45,7 @@ This service pulls in all the dependencies you need for an application and does 
 
 NOTE: If your IDE has the Spring Initializr integration, you can complete this process from your IDE.
 
-NOTE: You can also fork the project from Github and open it in your IDE or other editor.
+NOTE: You can also fork the project from Github and open it in your IDE or another editor.
 
 [[initial]]
 == Install and launch MongoDB
@@ -124,7 +124,7 @@ the `lastName` value. You can see how to invoke it further down in this guide.
 
 NOTE: By default, Spring Boot tries to connect to a locally hosted instance of MongoDB.
 Read the
-https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-mongodb[reference docs]
+https://docs.spring.io/spring-boot/reference/data/nosql.html#data.nosql.mongodb[reference docs]
 for how to point your application to an instance of MongoDB that is hosted elsewhere.
 
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/spring-boot-application-new-path.adoc[]
@@ -148,8 +148,11 @@ $ curl http://localhost:8080
 {
   "_links" : {
     "people" : {
-      "href" : "http://localhost:8080/people{?page,size,sort}",
+      "href" : "http://localhost:8080/people{?page,size,sort*}",
       "templated" : true
+    },
+    "profile" : {
+      "href" : "http://localhost:8080/profile"
     }
   }
 }
@@ -172,10 +175,15 @@ present):
 ----
 $ curl http://localhost:8080/people
 {
+  "_embedded" : {
+    "people" : [ ]
+  },
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/people{?page,size,sort}",
-      "templated" : true
+      "href" : "http://localhost:8080/people?page=0&size=20"
+    },
+    "profile" : {
+      "href" : "http://localhost:8080/profile/people"
     },
     "search" : {
       "href" : "http://localhost:8080/people/search"
@@ -203,11 +211,11 @@ The following command creates a person named "`Frodo Baggins`":
 [source,bash]
 ----
 $ curl -i -X POST -H "Content-Type:application/json" -d "{  \"firstName\" : \"Frodo\",  \"lastName\" : \"Baggins\" }" http://localhost:8080/people
-HTTP/1.1 201 Created
-Server: Apache-Coyote/1.1
+HTTP/1.1 201
 Location: http://localhost:8080/people/53149b8e3004990b1af9f229
-Content-Length: 0
-Date: Mon, 03 Mar 2014 15:08:46 GMT
+Content-Type: application/hal+json
+Transfer-Encoding: chunked
+Date: Tue, 10 Feb 2026 14:00:01 GMT
 ----
 
 - `-i`: Ensures you can see the response message including the headers. The URI of the
@@ -218,8 +226,8 @@ payload contains a JSON object.
 - `-d '{  "firstName" : "Frodo",  "lastName" : "Baggins" }'`: Is the data being sent.
 ====
 
-NOTE: Notice how the previous `POST` operation includes a `Location` header. This contains
-the URI of the newly created resource. Spring Data REST also has two methods
+NOTE: Notice how the previous `POST` operation includes a `Location` response header.
+This contains the URI of the newly created resource. Spring Data REST also has two methods
 (`RepositoryRestConfiguration.setReturnBodyOnCreate(…)` and `setReturnBodyOnUpdate(…)`)
 that you can use to configure the framework to immediately return the representation of
 the resource just created/updated.
@@ -266,7 +274,8 @@ Spring Data REST also uses the
 https://www.atteo.org/2011/12/12/Evo-Inflector.html[Evo Inflector] to pluralize the names
 of entities for groupings.
 
-You can directly query for the individual record, as the following example shows:
+You can directly query for the individual record, adapting the identifier to the one that
+was created for you:
 
 ====
 [source,bash]
@@ -302,6 +311,9 @@ $ curl http://localhost:8080/people/search
     "findByLastName" : {
       "href" : "http://localhost:8080/people/search/findByLastName{?name}",
       "templated" : true
+    },
+    "self" : {
+      "href" : "http://localhost:8080/people/search"
     }
   }
 }
@@ -316,18 +328,26 @@ To use the `findByLastName` query, run the following  command:
 ====
 [source,bash]
 ----
-$ curl "http://localhost:8080/people/search/findByLastName?name=Baggins"
+$ curl http://localhost:8080/people/search/findByLastName?name=Baggins
 {
   "_embedded" : {
-    "persons" : [ {
+    "people" : [ {
       "firstName" : "Frodo",
       "lastName" : "Baggins",
       "_links" : {
         "self" : {
           "href" : "http://localhost:8080/people/53149b8e3004990b1af9f229"
+        },
+        "person" : {
+          "href" : "http://localhost:8080/people/53149b8e3004990b1af9f229"
         }
       }
     } ]
+  },
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/people/search/findByLastName?name=Baggins"
+    }
   }
 }
 ----

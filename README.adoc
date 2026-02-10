@@ -71,7 +71,6 @@ the following command:
 [src,bash]
 ----
 $ brew services start mongodb-community
-==> Successfully started `mongodb-community` (label: homebrew.mxcl.mongodb-community)
 ----
 ====
 
@@ -438,4 +437,4 @@ The following guides may also be helpful:
 * https://spring.io/guides/gs/rest-service-cors/[Enabling Cross Origin Requests for a RESTful Web Service]
 * https://spring.io/guides/gs/rest-hateoas/[Building a Hypermedia-Driven RESTful Web Service]
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/refs/heads/main/footer.adoc[]
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/footer.adoc[]
